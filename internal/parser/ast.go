@@ -27,9 +27,6 @@ type SortByStage struct {
 type LimitStage struct{ N int }
 type ProjectStage struct{ Fields []ObjectField }
 
-// GroupByStage, NavStage are Phase 2/3 grammar — they parse successfully now
-// (parse-only stubs) but the evaluator rejects them with a clear
-// "not supported" field error until their phases land.
 type GroupByStage struct{ Path Path }
 type NavStage struct{ Kind NavKind }
 
@@ -104,7 +101,6 @@ type StrcallExpr struct {
 	Arg  string
 }
 
-// QuantifierExpr is Phase 3 grammar (any/all) — parses now, evaluator rejects.
 type QuantKind int
 
 const (
@@ -143,9 +139,9 @@ type Literal struct {
 	Bool bool
 }
 
-// AggKind/AggCallExpr are Phase 2 grammar (sum/avg/max/p95/count) — usable
-// only inside project() object field values. Parses now, evaluator rejects
-// unless a later phase implements aggregation.
+// AggKind/AggCallExpr (sum/avg/max/p95/count) are usable only inside
+// project() object field values, and only meaningful after a group_by
+// stage — see eval.stageProject.
 type AggKind int
 
 const (
@@ -162,7 +158,7 @@ type AggCallExpr struct {
 }
 
 // ObjectField is one `field` or `field: value` entry inside project({...}).
-// Value is either a Path (Phase 1) or an AggCallExpr (Phase 2 stub).
+// Value is either a Path or an AggCallExpr.
 type ObjectField struct {
 	Name  string
 	Value ObjectFieldValue

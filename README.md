@@ -4,20 +4,11 @@ A `jq`-like CLI for querying OpenTelemetry GenAI trace exports, offline. No back
 
 `otq` treats GenAI semantic-convention attributes (`gen_ai.*`) as first-class fields — model, tokens, prompt/completion messages, tool calls — instead of opaque attribute strings you'd otherwise have to dig out of raw `jq` against nested OTLP JSON.
 
-## Status
-
-Phases 1–3 of 4 done (see the project's PRD for the full roadmap):
-
-- **Phase 1** — OTLP ingestion, span flattening with GenAI field lifting, core query pipeline (`select`, `sort_by`, `limit`, `project`).
-- **Phase 2** — `group_by` and aggregation (`sum`, `avg`, `max`, `p95`, `count`) inside `project({...})`.
-- **Phase 3** — tree navigation (`children`, `descendants`, `parent`, `ancestors`, `root`), the `traces` source, and `any`/`all` quantifiers.
-- **Phase 4** — cross-platform release binaries via GitHub Releases (GoReleaser + CI, triggered on `v*.*.*` tags). Homebrew tap deferred for now — install via direct binary download in the meantime.
-
 ## Getting started
 
 ### Install a release binary
 
-Download the archive for your platform from the [Releases page](https://github.com/ChatIntel/otq/releases), extract, and put `otq` on your `PATH`:
+Download the archive for your platform from the [Releases page](https://github.com/ChatIntel/otq/releases), extract, and put `otq` on your `PATH`. (No Homebrew tap yet — direct download for now.)
 
 ```sh
 tar xzf otq_<version>_<os>_<arch>.tar.gz

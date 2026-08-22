@@ -28,9 +28,10 @@ func (e *ParseError) Error() string {
 }
 
 // FieldError is an evaluation-time type mismatch (e.g. any/all applied to a
-// non-array path) or a reference to a not-yet-implemented grammar construct
-// (Phase 2/3 stubs). A merely absent field is NOT a FieldError — that
-// evaluates to null per the query language's null-propagation rule.
+// non-array path) or a semantic-ordering violation (e.g. an aggregation
+// function used without a preceding group_by stage). A merely absent field
+// is NOT a FieldError — that evaluates to null per the query language's
+// null-propagation rule.
 type FieldError struct {
 	Field string
 	Msg   string
