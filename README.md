@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="otq" width="480">
+</p>
+
 # otq
 
 A `jq`-like CLI for querying OpenTelemetry GenAI trace exports, offline. No backend, no server — point it at OTLP JSON/JSONL files and pipe a `jq`-inspired pipeline query over spans.
