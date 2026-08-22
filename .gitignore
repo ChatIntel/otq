@@ -1,4 +1,5 @@
 /otq
 /bin/
+/dist/
 *.test
 *.out
