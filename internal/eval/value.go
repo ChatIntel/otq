@@ -121,8 +121,8 @@ func Equal(a, b Value) bool {
 // number-vs-number or string-vs-string (lexicographic); any other
 // combination (including either side being null) is simply "not less" —
 // ordering operators against a mismatched/absent value are a non-match,
-// not a crash. This is a deliberate Phase 1 leniency choice; revisit if
-// Phase 2 aggregation needs stricter semantics.
+// not a crash. Deliberate leniency, consistent with the rest of the query
+// language never erroring on a type/shape mismatch alone.
 func Less(a, b Value) bool {
 	if a.Kind == KNumber && b.Kind == KNumber {
 		return a.N < b.N

@@ -19,7 +19,7 @@ const (
 	RBRACE    // }
 	COLON     // :
 	COMMA     // ,
-	SEMICOLON // ; (reserved for Phase 3 quantifiers)
+	SEMICOLON // ; (used by any/all quantifiers)
 
 	EQ // ==
 	NE // !=
