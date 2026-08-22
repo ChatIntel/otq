@@ -11,16 +11,25 @@ Phases 1–3 of 4 done (see the project's PRD for the full roadmap):
 - **Phase 1** — OTLP ingestion, span flattening with GenAI field lifting, core query pipeline (`select`, `sort_by`, `limit`, `project`).
 - **Phase 2** — `group_by` and aggregation (`sum`, `avg`, `max`, `p95`, `count`) inside `project({...})`.
 - **Phase 3** — tree navigation (`children`, `descendants`, `parent`, `ancestors`, `root`), the `traces` source, and `any`/`all` quantifiers.
-
-Phase 4 (Homebrew tap, cross-platform release binaries) is the only piece left.
+- **Phase 4** — cross-platform release binaries via GitHub Releases (GoReleaser + CI, triggered on `v*.*.*` tags). Homebrew tap deferred for now — install via direct binary download in the meantime.
 
 ## Getting started
 
-### Prerequisites
+### Install a release binary
 
-- Go 1.22+
+Download the archive for your platform from the [Releases page](https://github.com/ChatIntel/otq/releases), extract, and put `otq` on your `PATH`:
 
-### Build
+```sh
+tar xzf otq_<version>_<os>_<arch>.tar.gz
+sudo mv otq /usr/local/bin/
+otq --version
+```
+
+(`.zip` for Windows.)
+
+### Build from source
+
+Prerequisite: Go 1.22+
 
 ```sh
 go build -o otq ./cmd/otq
@@ -99,6 +108,16 @@ Tree navigation (`children`, `descendants`, `parent`, `ancestors`, `root`) resol
 go build ./...
 go test ./...
 go vet ./...
+```
+
+## Releasing
+
+Pushing a `v*.*.*` tag triggers `.github/workflows/release.yml`, which runs [GoReleaser](https://goreleaser.com) (`.goreleaser.yml`) to cross-compile `darwin`/`linux`/`windows` × `amd64`/`arm64`, archive, checksum, and publish a GitHub Release — no manual steps, no extra secrets (uses the workflow's built-in `GITHUB_TOKEN`).
+
+To dry-run locally before tagging:
+
+```sh
+goreleaser release --snapshot --clean
 ```
 
 ## License
