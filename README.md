@@ -101,6 +101,10 @@ go test ./...
 go vet ./...
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for dev setup, branch/PR conventions, and code style.
+
 ## Releasing
 
 Pushing a `v*.*.*` tag triggers `.github/workflows/release.yml`, which runs [GoReleaser](https://goreleaser.com) (`.goreleaser.yml`) to cross-compile `darwin`/`linux`/`windows` × `amd64`/`arm64`, archive, checksum, and publish a GitHub Release — no manual steps, no extra secrets (uses the workflow's built-in `GITHUB_TOKEN`).
