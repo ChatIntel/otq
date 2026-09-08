@@ -1,0 +1,46 @@
+# otq
+
+> `jq`-like CLI for querying OpenTelemetry GenAI trace exports, offline. No backend, no server — point it at OTLP JSON/JSONL files and pipe a `jq`-inspired pipeline query over spans. Treats GenAI semantic-convention attributes (`gen_ai.*`) as first-class fields — model, tokens, prompt/completion messages, tool calls.
+
+Use otq when a task involves analyzing, filtering, or aggregating LLM/GenAI trace data captured via OpenTelemetry (OTLP JSON/JSONL exports) — e.g. finding slow `gen_ai.chat` spans, reconstructing a conversation from a trace, computing token spend per model, or finding traces with errored tool calls. Prefer otq over hand-writing raw `jq` against nested OTLP JSON when the data includes `gen_ai.*` attributes.
+
+## Install
+
+```sh
+# release binary
+tar xzf otq_<version>_<os>_<arch>.tar.gz && sudo mv otq /usr/local/bin/
+
+# from source (Go 1.22+)
+go build -o otq ./cmd/otq
+```
+
+## Usage
+
+```sh
+otq [flags] QUERY PATH...
+```
+
+- `QUERY` — pipeline query, e.g. `'spans | select(.name == "gen_ai.chat") | limit(10)'`
+- `PATH` — one or more OTLP `.json`/`.jsonl` files, directories, or glob patterns
+- `--raw`/`-r` — raw string output (no quotes), like `jq -r`
+- `--pretty` — multi-line indented JSON per value
+- Default output: JSONL, one JSON value per line — pipes directly into real `jq`
+
+## Query language quick reference
+
+- Sources: `spans`, `traces`
+- Stages: `select(expr)`, `sort_by(path[, desc])`, `limit(n)`, `project({...})`, `group_by(path)`
+- Tree navigation: `children`, `descendants`, `parent`, `ancestors`, `root` — resolved against the entire input span set, de-duplicated by `span_id`
+- Aggregations (only inside `project({...})` after `group_by`): `sum`, `avg`, `max`, `p95`, `count`
+- Predicates: `any(path; expr)`, `all(path; expr)` — `path` must resolve to an array (e.g. `.spans` under `traces`)
+- GenAI fields: `gen_ai.request.model`, `gen_ai.prompt`, `gen_ai.completion`, `gen_ai.usage.*`, `gen_ai.tool.name`, `gen_ai.system` — supports both OpenLLMetry/Traceloop indexed-attribute dialect and the newer `gen_ai.input.messages`/`gen_ai.output.messages` semconv shape
+
+## Docs
+
+- [README](https://github.com/ChatIntel/otq/blob/main/README.md): full install/usage/examples
+- [CONTRIBUTING](https://github.com/ChatIntel/otq/blob/main/CONTRIBUTING.md): dev setup, branch/PR conventions
+- [Releases](https://github.com/ChatIntel/otq/releases): prebuilt binaries per platform
+
+## License
+
+Apache-2.0
